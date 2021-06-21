@@ -1,6 +1,6 @@
-future,underlying_asset,maturity_date
+future_symbol,underlying_asset_symbol,future_maturity_date
 DLR/AGO21,DLR,31-08-2021
 DLR/SEP21,DLR,30-09-2021
-GGAL/AGO21,GGAL.BA,
+GGAL/AGO21,GGAL.BA
 PAMP/AGO21,PAMP.BA,31-08-2021
-YPFD/AGO21,YPFD.BA,
+YPFD/AGO21,YPFD.BA

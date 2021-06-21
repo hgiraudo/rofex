@@ -1,42 +1,48 @@
 import yfinance
 
-# spot_price (ticker)
+# get_ask_price (ticker)
+# get_bid_price (ticker)
 # -------------------
-# Devuelve el precio actual de un instrumento financiero
-# Los datos se toman de Yahoo Finances
+# Devuelve el precio de subasta/oferta  de un instrumento financiero
+# Los datos se toman de Yahoo Finance
 # Si no se encuentra precio, se imprime un mensaje de error y devuelve 0
 #
 # Ejemplo de uso
 # --------------
-# spot = spot_price ("GGAL")
-# if spot:
+# ticker = "GGAL"
+# ask_price = get_ask_price (ticker=ticker)
+# if ask_price:
 #   print(f"{ticker} cotiza a {spot:.2f}")  # GGAL.BA  cotiza a 168.95
 #
-# spot = spot_price ("XXX")  # Error. No hay spot price para el ticker XXX
-# if spot:
+# ask_price = get_ask_price (ticker="XXX")  # Error. No hay ask price para el ticker XXX
+# if ask_price:
 #   print(f"{ticker} cotiza a {spot:.2f}")
 
-
-def spot_price (ticker):
+def get_ask_price (ticker):
     info = yfinance.Ticker(ticker).info
-    if not 'previousClose' in info:
-        print("Error. No hay spot price para el ticker " + ticker)
+    if not 'ask' in info:
+        print("Error. No hay ask price para el ticker " + ticker)
         return 0
     else:
-        spot_price = info['previousClose']
-        spot_price = round(float(spot_price), 4)
-        return spot_price
+        ask_price = float(info['ask'])
+        return ask_price
+
+def get_bid_price (ticker):
+    info = yfinance.Ticker(ticker).info
+    if not 'bid' in info:
+        print("Error. No hay bid price para el ticker " + ticker)
+        return 0
+    else:
+        bid_price = float(info['bid'])
+        return bid_price
 
 if __name__ == "__main__":
 
     ticker = "GGAL.BA"
-    spot = spot_price(ticker)
-    if spot:
-        print(f"{ticker} cotiza a {spot:.2f}")
+    ask_price = get_ask_price(ticker=ticker)
+    bid_price = get_bid_price(ticker=ticker)
+    print(f"{ticker} ask price ${ask_price:.2f}")
+    print(f"{ticker} bid price ${bid_price:.2f}")
 
-    ticker = "XXX"
-    spot = spot_price(ticker)
-    if spot:
-        print(f"{ticker} cotiza a {spot:.2f}")
 
 

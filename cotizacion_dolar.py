@@ -53,6 +53,15 @@ def dolar_oficial_promedio ():
     compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
     return (compra + venta) / 2
 
+def dolar_oficial_venta ():
+    compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
+    return venta
+
+def dolar_oficial_compra ():
+    compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
+    return compra
+
+
 # Prueba
 
 if __name__ == "__main__":

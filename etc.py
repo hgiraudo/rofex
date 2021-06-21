@@ -20,68 +20,39 @@ def yearly_rates (interest, days):
     effective_rate = (interest + 1) ** (365 / days) - 1
     return nominal_rate, effective_rate
 
-# remaining_days (maturity_date)
-# ---------------------------
-# Calcula la cantidad de días entre la fecha actual y una fecha futura
-# Recibe la fecha futura en un string con formato dd-mm-yyyy o un objeto datetime.date
-#
-# Ejemplo de uso:
-# ---------------
-# fecha_string = "31-08-2021"
-# dias = remaining_days(fecha_string)
-# print(f"Faltan {dias} dias para el {fecha_string}")  # Faltan 81 dias para el 31-08-2021
-#
-# fecha_date = datetime.date(2021, 8, 31)
-# dias = remaining_days(fecha_date)
-# print(f"Faltan {dias} dias para el {fecha_date}")  # Faltan 81 dias para el 2021-08-31
 
-def remaining_days (maturity_date):
-    today = datetime.date.today()
-    if isinstance(maturity_date, str):
-        maturity_date = datetime.datetime.strptime(maturity_date, "%d-%m-%Y").date()
-    remaining_days = (maturity_date - today).days
-    return remaining_days
 
-# get_maturity_date
-# -----------------
-# Determina la fecha de fin de un futuro a partir del nombre del ticker
-# El ticker suele tener la forma xyz/MMMYY donde xyz es el subyacente, MMM es el mes e YY es el año
-# Devuelve un objeto de tipo datetime.date
-#
-# Ejemplo de uso
-# --------------
-# print(get_maturity_date("DLR/OCT21"))  # 2021-10-31
-# print(type(get_maturity_date("DLR/OCT21")))  # <class 'datetime.date'>
-
-def get_maturity_date (ticker):
-    month_string = ticker.split("/")[1][:3]  # ej: OCT
-    month_list = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
-    month = month_list.index(month_string) + 1
-    year = int(ticker.split("/")[1][3:]) + 2000
-    # Para determinar el ultimo dia del mes se busca el primer día del mes siguiente y se resta 1
-    maturity_date = datetime.date(year, month + 1, 1)
-    maturity_date = maturity_date + datetime.timedelta(days=-1)
-    return maturity_date
-
-# print_implicit_rates(asset, spot_price, bid_price, ask_price, days_to_maturity)
+# print_implicit_rates(asset, spot_price, bid_price, ask_price, days_to_maturity, transacion_cost)
 # -------------------------------------------------------------------------------
 # Calcula e imprime las tasas implicitas de un activo (accion, divisa, etc)
 #
 # Ejemplos de uso:
 # ----------------
-# print_implicit_rates("GGAL/AGO21", 170.6, 171.15, 173.4, 81)
-#   GGAL/AGO21 Tasa colocadora: TNA 1.45% TEA 1.46%
-#   GGAL/AGO21 Tasa tomadora: TNA 7.40% TEA 7.61%
+# print_implicit_rates(asset="GGAL/AGO21", spot_price=170, bid_price=172,
+#                      ask_price=173, days_to_maturity=81, transaction_cost=0.001)
+#   GGAL/AGO21 Tasa tomadora: TNA 8.87% TEA 9.18%
+#   GGAL/AGO21 Tasa colocadora: TNA 4.39% TEA 4.47%
 
-def print_implicit_rates(asset, spot_price, bid_price, ask_price, days_to_maturity):
-    bid_rate, ask_rate = 0, 0
-    if bid_price and spot_price:
-        bid_rate, tea = yearly_rates(bid_price / spot_price - 1, days_to_maturity)
-        print(f"{asset} Tasa colocadora: TNA {bid_rate:.2%} TEA {tea:.2%}")
-    if ask_rate and spot_price:
-        tasa_tomadora, tea = yearly_rates(ask_price / spot_price - 1, days_to_maturity)
-        print(f"{asset} Tasa tomadora: TNA {ask_rate:.2%} TEA {tea:.2%}")
-    return bid_rate, ask_rate
+def implicit_rates(asset, spot_bid_price, spot_ask_price, future_bid_price, future_ask_price,
+                   days_to_maturity, transaction_cost):
+    nominal_short_rate, nominal_long_rate = 0, 0
+
+    # Short position: short-sell the security and buy the future
+    if future_ask_price and spot_bid_price:
+        amount_lent = spot_bid_price * (1 - transaction_cost)
+        amount_returned = future_ask_price * (1 + transaction_cost)
+        interest = amount_returned / amount_lent - 1
+        nominal_short_rate, effective_short_rate = yearly_rates(interest, days_to_maturity)
+        print(f"{asset} Spot bid: ${spot_bid_price} Future ask: ${future_ask_price} Tasa tomadora: TNA {nominal_short_rate:.2%} TEA {effective_short_rate:.2%}")
+
+    # Long position: buy the security and sell the future
+    if future_bid_price and spot_ask_price:
+        investment = spot_ask_price * (1 + transaction_cost)
+        investment_return = future_bid_price * (1 - transaction_cost)
+        interest = investment_return / investment - 1
+        nominal_long_rate, effective_long_rate  = yearly_rates(interest, days_to_maturity)
+        print(f"{asset} Spot ask: ${spot_ask_price} Future bid: ${future_bid_price} Tasa colocadora: TNA {nominal_long_rate:.2%} TEA {effective_long_rate:.2%}")
+    return nominal_short_rate, nominal_long_rate
 
 # def implicit_rates_ticker (spot_ticker, future_ticker, maturity_date=""):
 #     if maturity_date == "":

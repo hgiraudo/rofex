@@ -9,7 +9,7 @@ pyRofex.initialize(user="hgiraudo2113",
 # Makes a request to the Rest API and get the last price
 # Use the MarketDataEntry enum to specify the data
 get_market_data = pyRofex.get_market_data(ticker="DLR/JUL21",
-                        entries=[pyRofex.MarketDataEntry.BIDS, pyRofex.MarketDataEntry.OFFERS ])
+                        entries=[pyRofex.MarketDataEntry.BIDS, pyRofex.MarketDataEntry.OFFERS])
 print(get_market_data)
 
 get_market_data = pyRofex.get_market_data(ticker="DLR/AGO21")
