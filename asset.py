@@ -1,3 +1,8 @@
+# asset.py
+# --------
+# Este modulo define la clase FinancialAsset
+# FinancialAsset puede ser una divisa, una accion o un futuro
+
 
 import cotizacion_dolar
 import datetime
@@ -22,12 +27,14 @@ class FinancialAsset:
     # print(type(FinancialAsset.get_maturity_date("DLR/OCT21")))  # <class 'datetime.date'>
 
     def get_maturity_date(ticker):
-        month_string = ticker.split("/")[1][:3]  # ej: OCT
+
+        # Toma los 3 primeros caracteres despues de la barra. Si el ticker es DLR/OCT21, el resultado es OCT
+        month_string = str(ticker).split("/")[1][:3]
         month_list = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
-        month = month_list.index(month_string) + 1
-        year = int(ticker.split("/")[1][3:]) + 2000
+        month_number = month_list.index(month_string) + 1
+        year = int(str(ticker).split("/")[1][3:]) + 2000
         # Para determinar el ultimo dia del mes se busca el primer día del mes siguiente y se resta 1
-        maturity_date = datetime.date(year, month + 1, 1)
+        maturity_date = datetime.date(year, month_number + 1, 1)
         maturity_date = maturity_date + datetime.timedelta(days=-1)
         return maturity_date
 
@@ -55,6 +62,11 @@ class FinancialAsset:
             remaining_days = 1  # Si el futuro vence hoy, tomar 1 dia para evitar la division por 0
         return remaining_days
 
+    # Constructor
+    # symbol: ticker (e.g. GGAL.BA, GGAL/AGO21)
+    # asset_type: un valor entre ASSET_TYPE_CURRENCY, ASSET_TYPE_STOCK, ASSET_TYPE_FUTURE
+    # maturity_date: parámetro opcional. Se usa solo para futuros. Si el activos es un futuro y este parámetro
+    # no se especifica, la fecha de vencimiento se infiere a partir del symbol
     def __init__(self, symbol, asset_type, maturity_date=None):
         self.symbol = symbol
         self.asset_type = asset_type
@@ -66,6 +78,8 @@ class FinancialAsset:
         else:
             self.days_to_maturity = 0
 
+    # ask_price()
+    # Devuelve el precio actual de venta del activo
     def ask_price(self):
         if self.asset_type == ASSET_TYPE_CURRENCY:
             if self.symbol == "DLR":
@@ -77,6 +91,8 @@ class FinancialAsset:
         elif self.asset_type == ASSET_TYPE_STOCK:
             return yahoo_finance.get_ask_price(self.symbol)
 
+    # ask_price()
+    # Devuelve el precio actual de compra del activo
     def bid_price(self):
         if self.asset_type == ASSET_TYPE_CURRENCY:
             if self.symbol == "DLR":
@@ -88,6 +104,8 @@ class FinancialAsset:
         elif self.asset_type == ASSET_TYPE_STOCK:
             return yahoo_finance.get_bid_price(self.symbol)
 
+    # __str__()
+    # Imprime una descripcion del activo
     def __str__(self):
         extra_info = ""
         if self.asset_type == ASSET_TYPE_CURRENCY:
@@ -96,19 +114,23 @@ class FinancialAsset:
             asset_type_string = "Stock"
         elif self.asset_type == ASSET_TYPE_FUTURE:
             asset_type_string = "Future"
-            extra_info = f" Maturity date:{self.maturity_date}"
+            extra_info = f" MaturityDate:{self.maturity_date}"
         else:
             asset_type_string = "Unknown"
         return f"<class 'FinancialAsset'> Symbol:{self.symbol} Type:{asset_type_string}{extra_info}"
 
+# Test: asset.py
+
 if __name__ == "__main__":
 
     dolar = FinancialAsset(symbol="DLR", asset_type=ASSET_TYPE_CURRENCY)
-    print(f"{dolar} Ask price:${dolar.ask_price()} Bid price:${dolar.bid_price()}")
-
-    ggalago21 = FinancialAsset(symbol="GGAL/AGO21", asset_type=ASSET_TYPE_FUTURE)
-    print(f"{ggalago21} Ask price:${ggalago21.ask_price()} Bid price:${ggalago21.bid_price()}")
+    print(f"{dolar} Bid price:${dolar.bid_price()} Ask price:${dolar.ask_price()} ")
+    # <class 'FinancialAsset'> Symbol:DLR Type:Currency Bid price:$94.71 Ask price:$100.71
 
     ggal = FinancialAsset(symbol="GGAL.BA", asset_type=ASSET_TYPE_STOCK)
-    print(f"{ggal} Ask price:${ggal.ask_price()} Bid price:${ggal.bid_price()}")
+    print(f"{ggal} Bid price:${ggal.bid_price()} Ask price:${ggal.ask_price()} ")
+    # <class 'FinancialAsset'> Symbol:GGAL.BA Type:Stock Bid price: $ 161.5 Ask price: $163.4
 
+    ggalago21 = FinancialAsset(symbol="GGAL/AGO21", asset_type=ASSET_TYPE_FUTURE)
+    print(f"{ggalago21} Bid price:${ggalago21.bid_price()} Ask price:${ggalago21.ask_price()} ")
+    # <class 'FinancialAsset'> Symbol:GGAL/AGO21 Type:Future MaturityDate:2021-08-31 Bid price:$170.5 Ask price:$172.4

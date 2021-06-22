@@ -99,10 +99,8 @@ def dolar_oficial_compra ():
 if __name__ == "__main__":
     cotizacion = dolar_oficial_promedio()
     print(cotizacion)  # e.g. 97.37
-    print(type(cotizacion))  # float
+    print(type(cotizacion))  # <class 'float'>
     compra, venta = dolar_oficial()
     print(compra, venta)  # 94.71 100.71
     compra, venta = dolar(TIPO_COTIZACION_BLUE)
     print(compra, venta)  # 159.0 164.0
-
-+

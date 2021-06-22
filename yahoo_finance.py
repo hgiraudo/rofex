@@ -1,3 +1,8 @@
+# yahoo_finance.py
+# ----------------
+# Este módulo contiene funciones para tomar cotizaciones de Yahoo Finance
+
+
 import yfinance
 
 # get_ask_price (ticker)
@@ -41,8 +46,8 @@ if __name__ == "__main__":
     ticker = "GGAL.BA"
     ask_price = get_ask_price(ticker=ticker)
     bid_price = get_bid_price(ticker=ticker)
-    print(f"{ticker} ask price ${ask_price:.2f}")
-    print(f"{ticker} bid price ${bid_price:.2f}")
+    print(f"{ticker} ask price ${ask_price:.2f}") # GGAL.BA ask price $ 163.40
+    print(f"{ticker} bid price ${bid_price:.2f}") # GGAL.BA bid price $ 161.50
 
 
 
