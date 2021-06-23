@@ -45,21 +45,24 @@ def implicit_rates(asset, spot_bid_price, spot_ask_price, future_bid_price, futu
                    days_to_maturity, transaction_cost):
     nominal_short_rate, nominal_long_rate = 0, 0
 
-    # Short position: short-sell the security and buy the future
-    if future_ask_price and spot_bid_price:
-        amount_lent = spot_bid_price * (1 - transaction_cost)
-        amount_returned = future_ask_price * (1 + transaction_cost)
-        interest = amount_returned / amount_lent - 1
-        nominal_short_rate, effective_short_rate = yearly_rates(interest, days_to_maturity)
-        print(f"{asset} Spot bid: ${spot_bid_price} Future ask: ${future_ask_price} Tasa tomadora: TNA {nominal_short_rate:.2%} TEA {effective_short_rate:.2%}")
-
     # Long position: buy the security and sell the future
     if future_bid_price and spot_ask_price:
         investment = spot_ask_price * (1 + transaction_cost)
         investment_return = future_bid_price * (1 - transaction_cost)
         interest = investment_return / investment - 1
         nominal_long_rate, effective_long_rate  = yearly_rates(interest, days_to_maturity)
-        print(f"{asset} Spot ask: ${spot_ask_price} Future bid: ${future_bid_price} Tasa colocadora: TNA {nominal_long_rate:.2%} TEA {effective_long_rate:.2%}")
+        print(f"{asset} Spot ask: ${spot_ask_price} Future bid: ${future_bid_price} Tasa colocadora: "
+              f"TNA {nominal_long_rate:.2%} TEA {effective_long_rate:.2%}")
+
+    # Short position: short-sell the security and buy the future
+    if future_ask_price and spot_bid_price:
+        amount_lent = spot_bid_price * (1 - transaction_cost)
+        amount_returned = future_ask_price * (1 + transaction_cost)
+        interest = amount_returned / amount_lent - 1
+        nominal_short_rate, effective_short_rate = yearly_rates(interest, days_to_maturity)
+        print(f"{asset} Spot bid: ${spot_bid_price} Future ask: ${future_ask_price} Tasa tomadora: "
+              f"TNA {nominal_short_rate:.2%} TEA {effective_short_rate:.2%}")
+
     return nominal_short_rate, nominal_long_rate
 
 # Test: rate.py

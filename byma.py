@@ -1,6 +1,7 @@
-# yahoo_finance.py
+# byma.py
 # ----------------
 # Este módulo contiene funciones para tomar cotizaciones de Yahoo Finance
+# Tambien tiene funciones que simulan la compra y
 
 
 import yfinance
@@ -40,6 +41,12 @@ def get_bid_price (ticker):
     else:
         bid_price = float(info['bid'])
         return bid_price
+
+def buy(ticker, quantity, price):
+    print(f"Orden de compra: {quantity:.0f} unidades de {ticker} a ${price:.2f}")
+
+def sell(ticker, quantity, price):
+    print(f"Orden de venta: {quantity:.0f} unidades {ticker} a ${price:.2f}")
 
 if __name__ == "__main__":
 

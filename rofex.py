@@ -79,3 +79,8 @@ def get_ask_price(ticker):
         print("No hay precios de mercado para el ticker " + ticker)
         return 0
 
+def buy(ticker, quantity, price):
+    print(f"Orden de compra: {quantity:.0f} unidades de {ticker} a ${price:.2f}")
+
+def sell(ticker, quantity, price):
+    print(f"Orden de venta: {quantity:.0f} unidades {ticker} a ${price:.2f}")

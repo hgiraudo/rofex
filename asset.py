@@ -7,7 +7,7 @@
 import cotizacion_dolar
 import datetime
 import rofex
-import yahoo_finance
+import byma
 
 ASSET_TYPE_CURRENCY = 1  # e.g. DLR
 ASSET_TYPE_STOCK = 2  # e.g. GGAL.BA, YPFD.BA, PAMP.BA
@@ -89,7 +89,7 @@ class FinancialAsset:
         elif self.asset_type == ASSET_TYPE_FUTURE:
             return rofex.get_ask_price(self.symbol)
         elif self.asset_type == ASSET_TYPE_STOCK:
-            return yahoo_finance.get_ask_price(self.symbol)
+            return byma.get_ask_price(self.symbol)
 
     # ask_price()
     # Devuelve el precio actual de compra del activo
@@ -102,7 +102,7 @@ class FinancialAsset:
         elif self.asset_type == ASSET_TYPE_FUTURE:
             return rofex.get_bid_price(self.symbol)
         elif self.asset_type == ASSET_TYPE_STOCK:
-            return yahoo_finance.get_bid_price(self.symbol)
+            return byma.get_bid_price(self.symbol)
 
     # __str__()
     # Imprime una descripcion del activo
