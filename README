@@ -9,6 +9,7 @@
 #   tasa tomadora: venta en corto de un activo y compra de un futuro del mismo activo (ej: PAMP y PAMP/AGO21)
 # Los futuros operados deben tener la misma fecha de vencimiento. No se busca arbitrar tasas por ejemplo con GGAL/AGO21
 # y PAMP/SEP21
+# Todos los montos estan expresados en miles de pesos (e.g. donde dice $ 40.2 debe leerse $40200
 #
 # 02. Test
 # --------
