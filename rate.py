@@ -101,7 +101,6 @@ if __name__ == "__main__":
 
     # Test: interest_rate_batch_test.csv
     MAX_ABSOLUTE_ERROR = 0.000001  # Diferencia maxima entre el valor calculado y el valor leido del lote de test
-
     print()
     with open('interest_rate_test.csv') as csvfile:
         reader = csv.DictReader(csvfile)
@@ -117,20 +116,21 @@ if __name__ == "__main__":
             test_nominal_short_rate = float(row['test_nominal_short_rate'])
             test_nominal_long_rate = float(row['test_nominal_long_rate'])
 
-            nominal_short_rate, nominal_long_rate = implicit_rates(asset=str(test_id),
-                                                                   spot_bid_price=spot_bid_price,
-                                                                   spot_ask_price=spot_ask_price,
-                                                                   future_bid_price=future_bid_price,
-                                                                   future_ask_price=future_ask_price,
-                                                                   days_to_maturity=days_to_maturity,
-                                                                   transaction_cost=transaction_cost)
+            if test_id:
+                nominal_short_rate, nominal_long_rate = implicit_rates(asset=str(test_id),
+                                                                       spot_bid_price=spot_bid_price,
+                                                                       spot_ask_price=spot_ask_price,
+                                                                       future_bid_price=future_bid_price,
+                                                                       future_ask_price=future_ask_price,
+                                                                       days_to_maturity=days_to_maturity,
+                                                                       transaction_cost=transaction_cost)
 
-            if abs(nominal_short_rate - test_nominal_short_rate) < MAX_ABSOLUTE_ERROR \
-                    and abs(nominal_long_rate - test_nominal_long_rate) < MAX_ABSOLUTE_ERROR:
-                print(test_id, "OK!")
-                print()
-            else:
-                print(f"Error en {test_id}")
-                print(f"{nominal_short_rate:.4%} != {test_nominal_short_rate:.4%}")
-                print(f"{nominal_long_rate:.4%} != {test_nominal_long_rate:.4%}")
-                print()
+                if abs(nominal_short_rate - test_nominal_short_rate) < MAX_ABSOLUTE_ERROR \
+                        and abs(nominal_long_rate - test_nominal_long_rate) < MAX_ABSOLUTE_ERROR:
+                    print(test_id, "OK!")
+                    print()
+                else:
+                    print(f"Error en {test_id}")
+                    print(f"{nominal_short_rate:.4%} != {test_nominal_short_rate:.4%}")
+                    print(f"{nominal_long_rate:.4%} != {test_nominal_long_rate:.4%}")
+                    print()

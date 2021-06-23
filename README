@@ -1,0 +1,40 @@
+# Proyecto Almafintech
+# Repository: https://github.com/hgiraudo/rofex
+# Lenguaje: python v3
+#
+# 01. Resumen
+# -----------
+# Busca oportunidades de arbitraje de tasas mediante 2 pares de operaciones simultánea
+#   tasa colocadora: compra de un activo y venta de un futuro del mismo activo (ej: GGAL y GGAL/AGO21)
+#   tasa tomadora: venta en corto de un activo y compra de un futuro del mismo activo (ej: PAMP y PAMP/AGO21)
+# Los futuros operados deben tener la misma fecha de vencimiento. No se busca arbitrar tasas por ejemplo con GGAL/AGO21
+# y PAMP/SEP21
+#
+# 02. Test
+# --------
+# Todos los modulos tienen un testeo unitario ubicado en el propio archivo, con la siguiente forma:
+#
+# if __name__ == "__main__":
+#   <código de testeo unitario>
+#
+# En el caso particular de rate.py, el testeo unitario incluye un lote de prueba (interest_rate_test.csv)
+# Para agregar casos de prueba, añadir filas en la planilla interest_rate_text.xls
+# Ingresar valores en las celdas A a G inclusive (celdas en amarillo)
+#
+# 03. Archivos de codigo
+# ----------------------
+# asset.py: define la clase FinancialAsset. FinancialAsset puede ser una divisa, una accion o un futuro
+# byma.py: simula la compra y venta de acciones en BYMA. Tambien devuelve precios de mercado de acciones
+# cotizacion_dolar.py: funciones que devuelven la cotizacion actual del dolar (fuente: www,dolarsi.com)
+# main.py: modulo principal. Ejecuta el arbitraje de tasas
+# rate.py: funciones para calcular tasas implicitas y tasas anualizadas
+# rate_watch_list.py: define la clase RateWatchList. RateWatchList es una coleccion de pares FinancialAsset que
+#       permiten tomar o colocar tasa
+# rofex.py: funciones wrapper para invocar a pyRofex (conexion a MatbaRofex)
+#
+# 04. Otros archivos
+# ------------------
+# config.ini: datos de conexion a MatbaRofex y parametro de costo de transaccion
+# interest_rate_test.csv: lote de pruebas para testeo unitario de rate.py
+# interest_rate_text.xlsx: planilla Excel para generar interest_rate_test.csv
+# watch_list.csv: lista de pares (futuro, activo subyacente) con los cuales buscar arbitraje de tasas

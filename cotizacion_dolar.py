@@ -25,6 +25,7 @@ TIPO_COTIZACION_SOJA = 'Dolar Soja'
 
 DOLAR_URL_API = 'https://www.dolarsi.com/api/api.php?type=valoresprincipales'
 
+
 # dolar(tipo_cotizacion)
 # ----------------------
 # Devuelve el valor de commpra y venta de un tipo de dolar
@@ -33,8 +34,7 @@ DOLAR_URL_API = 'https://www.dolarsi.com/api/api.php?type=valoresprincipales'
 # Ejemplo de uso:
 # compra, venta = dolar(TIPO_COTIZACION_BLUE)
 # print(compra, venta)  # 152.0 157.0
-
-def dolar(tipo_cotizacion) :
+def dolar(tipo_cotizacion):
 
     json = requests.get(DOLAR_URL_API).json()
 
@@ -45,7 +45,7 @@ def dolar(tipo_cotizacion) :
         # El valor almacenado en cada diccionario es a su vez otro diccionario
         for dict_inner in dict_outer.values():
 
-          if dict_inner['nombre'] == tipo_cotizacion:
+            if dict_inner['nombre'] == tipo_cotizacion:
                 compra = dict_inner['compra']
                 venta = dict_inner['venta']
                 # La API devuelve un string con separador decimal coma (Ej: 165,25).
@@ -54,44 +54,36 @@ def dolar(tipo_cotizacion) :
                 venta = float(venta.replace(',', '.'))
                 return compra, venta
 
+
 # dolar_oficial_promedio()
 # ----------------------
 # Devuelve el promedio entre el valor de compra y venta del dolar oficial
-
-def dolar_oficial_promedio ():
+def dolar_oficial_promedio():
     compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
     return (compra + venta) / 2
-
-def dolar_oficial_venta ():
-    compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
-    return venta
-
-def dolar_oficial_compra ():
-    compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
-    return compra
 
 
 # dolar_oficial()
 # ----------------------
 # Devuelve el valor de compra y venta del dolar oficial
 
-def dolar_oficial ():
+def dolar_oficial():
     compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
     return compra, venta
+
 
 # dolar_oficial_venta()
 # ----------------------
 # Devuelve el valor de venta actual del dolar oficial
-
-def dolar_oficial_venta ():
+def dolar_oficial_venta():
     compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
     return venta
+
 
 # dolar_oficial_compra()
 # ----------------------
 # Devuelve el valor de compra actual del dolar oficial
-
-def dolar_oficial_compra ():
+def dolar_oficial_compra():
     compra, venta = dolar(TIPO_COTIZACION_OFICIAL)
     return compra
 

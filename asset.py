@@ -13,6 +13,7 @@ ASSET_TYPE_CURRENCY = 1  # e.g. DLR
 ASSET_TYPE_STOCK = 2  # e.g. GGAL.BA, YPFD.BA, PAMP.BA
 ASSET_TYPE_FUTURE = 3  # e.g. DLR/AGO21, DLR/SEP21, GGAL/AGO21
 
+
 class FinancialAsset:
 
     # get_maturity_date
@@ -55,9 +56,11 @@ class FinancialAsset:
 
     def remaining_days(maturity_date):
         today = datetime.date.today()
-        if isinstance(maturity_date, str):
-            maturity_date = datetime.datetime.strptime(maturity_date, "%d-%m-%Y").date()
-        remaining_days = (maturity_date - today).days
+        if isinstance(maturity_date, str):  # el parametro puede ser de tipo string o datetime
+            maturity_date_dt = datetime.datetime.strptime(maturity_date, "%d-%m-%Y").date()
+        else:
+            maturity_date_dt = maturity_date
+        remaining_days = (maturity_date_dt - today).days
         if remaining_days == 0:
             remaining_days = 1  # Si el futuro vence hoy, tomar 1 dia para evitar la division por 0
         return remaining_days
@@ -72,7 +75,7 @@ class FinancialAsset:
         self.asset_type = asset_type
         if asset_type == ASSET_TYPE_FUTURE:
             if maturity_date is None:
-                maturity_date = FinancialAsset.get_maturity_date(symbol)
+                maturity_date = FinancialAsset.get_maturity_date(ticker=symbol)
             self.maturity_date = maturity_date
             self.days_to_maturity = FinancialAsset.remaining_days(maturity_date)
         else:
@@ -119,8 +122,8 @@ class FinancialAsset:
             asset_type_string = "Unknown"
         return f"<class 'FinancialAsset'> Symbol:{self.symbol} Type:{asset_type_string}{extra_info}"
 
-# Test: asset.py
 
+# Test: asset.py
 if __name__ == "__main__":
 
     dolar = FinancialAsset(symbol="DLR", asset_type=ASSET_TYPE_CURRENCY)

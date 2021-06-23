@@ -2,15 +2,15 @@
 # Se considera que hay cantidad suficiente en el activo spot
 # Bug: solo se procesa la tasa tomadora y colocadora si hay BIDS y OFFERS. Si hay uno solo, no
 
-from asset import *
 from rate_watch_list import *
 import csv
-import pyRofex, rofex
+import pyRofex
+import rofex
 import configparser
-
 
 # Variables globales
 global watch_list
+
 
 # setup_watch_list()
 # ------------------
@@ -50,6 +50,7 @@ def setup_watch_list():
             print(instrument)
         print("------------------")
 
+
 # First we define the handlers that will process the messages and exceptions.
 def market_data_handler(message):
     global watch_list
@@ -69,17 +70,17 @@ def market_data_handler(message):
         pass
 
 
-def market_data_handler2(message):
-    print(message)
-
 def order_report_handler(message):
     print("Order Report Message Received: {0}".format(message))
+
 
 def error_handler(message):
     print("Error Message Received: {0}".format(message))
 
+
 def exception_handler(e):
     print("Exception Occurred: {e}", e)
+
 
 def setup_websocket_connection():
     # Initiate Websocket Connection
@@ -88,9 +89,9 @@ def setup_websocket_connection():
                                       error_handler=error_handler,
                                       exception_handler=exception_handler)
 
+
 # subscribe_market_data()
 # -----------------------
-
 def subscribe_market_data():
     global watch_list
     tickers = watch_list.get_watch_symbols()
@@ -102,6 +103,7 @@ def subscribe_market_data():
 
     # Suscribirse para pedir informacion de market data
     pyRofex.market_data_subscription(tickers=tickers, entries=entries)
+
 
 # Crea una RateWatchList
 # Setea el costo de transaccion
@@ -126,5 +128,3 @@ if __name__ == "__main__":
     setup_watch_list()  # Cargar la lista de futuros a monitorear
     setup_websocket_connection()  # Indicar las funciones que manejan los eventos websocket
     subscribe_market_data()  # Suscribirse a bids y offers de los futuros de la watch_list
-
-
