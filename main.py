@@ -44,11 +44,11 @@ def setup_watch_list():
 
         # Imprimir la lista de instrumentos a los cuales suscribirse para pedir market data
         instruments = watch_list.get_watch_symbols()
-        print("Futures watch list")
-        print("------------------")
+        print("Lista de futuros a monitorear")
+        print("-----------------------------")
         for instrument in instruments:
             print(instrument)
-        print("------------------")
+        print("-----------------------------")
 
 
 # First we define the handlers that will process the messages and exceptions.

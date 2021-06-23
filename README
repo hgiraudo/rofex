@@ -21,6 +21,10 @@
 # Para agregar casos de prueba, añadir filas en la planilla interest_rate_text.xls
 # Ingresar valores en las celdas A a G inclusive (celdas en amarillo)
 #
+# A los efectos de testear el funcionamiento, puede colocarse un costo de transaccion negativo en config.ini
+# (por ejemplo, -0.02). El costo negativo aumenta la tasa colocadora y disminuye la tasa tomadora,
+# generando oportunidades ficticias de arbitraje.
+#
 # 03. Archivos de codigo
 # ----------------------
 # asset.py: define la clase FinancialAsset. FinancialAsset puede ser una divisa, una accion o un futuro

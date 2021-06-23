@@ -90,7 +90,7 @@ class FinancialAsset:
             else:
                 return 0
         elif self.asset_type == ASSET_TYPE_FUTURE:
-            return rofex.get_ask_price(self.symbol)
+            return rofex.get_ask_price(self.symbol)[0]
         elif self.asset_type == ASSET_TYPE_STOCK:
             return byma.get_ask_price(self.symbol)
 
@@ -103,7 +103,7 @@ class FinancialAsset:
             else:
                 return 0
         elif self.asset_type == ASSET_TYPE_FUTURE:
-            return rofex.get_bid_price(self.symbol)
+            return rofex.get_bid_price(self.symbol)[0]
         elif self.asset_type == ASSET_TYPE_STOCK:
             return byma.get_bid_price(self.symbol)
 

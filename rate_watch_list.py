@@ -121,7 +121,6 @@ class RateWatchList:
               f"{best_long_quantity} unidades, ${best_long_investment:.2f}) ")
         print(f"Mejor tasa tomadora a {days_to_maturity} dias: {best_short_rate:.2%} ({best_short_future}, "
               f"{best_short_quantity} unidades, ${best_short_investment:.2f}) ")
-        print()
 
         if nominal_long_rate > best_short_rate or nominal_short_rate < best_long_rate:
             # Hay una oportunidad de arbitraje de tasas
@@ -168,6 +167,8 @@ class RateWatchList:
             total_profit = total_investment + total_return
 
             # Mostrar en pantalla datos de la operacion
+            print()
+            print("Oportunidad de arbitraje de tasas!")
             print("Tasa colocadora")
             print(f"Comprar {long_rate_buy_asset}: {long_rate_quantity:.0f} x ${long_rate_buy_price:.2f} "
                   f"= ${long_rate_investment:.2f} (incl. costos)")
@@ -182,7 +183,25 @@ class RateWatchList:
             maturity_date_string = future_asset.maturity_date.strftime("%d-%b-%Y")
             print(f"Flujos netos: ${total_investment:.2f} ({today_string}) "
                   f"${total_return:.2f} ({maturity_date_string})")
-            print(f"Ganancia neta: ${total_profit:.2f} ({days_to_maturity} dias)")
+
+            # Según sean los signos de los flujos, hay 3 escenarios posibles:
+            # 1- Ganancia hoy y ganancia al fin del proyecto
+            # 2- Obtener una rentabilidad hoy y contar con fondos a tasa 0%
+            # 3- Invertir hoy para recuperar un monto mayor al vencimiento (el mas comun)
+            if total_investment >= 0 and total_return >= 0:
+                # Caso 1- Ganancia hoy y ganancia al fin del proyecto
+                print(f"Ganancia neta: ${total_investment:.2f} al inicio + "
+                      f"${total_return:.2f} en la fecha de vencimiento ")
+            elif total_investment >= 0:
+                # Caso 2- Obtener una rentabilidad hoy y contar con fondos a tasa 0%
+                zero_rate_funds = abs(total_return)  # total_return es negativo
+                print(f"Ganancia neta: ${total_profit:.2f} al inicio + ${zero_rate_funds:.2f} "
+                      f"a tasa 0% por {days_to_maturity} dias")
+            else:
+                # Caso 3- Invertir hoy para recuperar un monto mayor al vencimiento
+                interest = abs(total_profit / total_investment)
+                tna, tea = rate.yearly_rates(interest=interest, days=days_to_maturity)
+                print(f"Ganancia neta: ${total_profit:.2f} ({days_to_maturity} dias) TNA {tna:.2%}")
             print()
 
             # Controlar que la operacion sea rentable. Si se ejecuta esta parte del código, debería serlo.

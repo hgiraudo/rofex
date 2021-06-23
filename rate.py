@@ -46,6 +46,7 @@ def implicit_rates(asset, spot_bid_price, spot_ask_price, future_bid_price, futu
                    days_to_maturity, transaction_cost):
     nominal_short_rate, nominal_long_rate = 0, 0
 
+    print()
     # Long position: buy the security and sell the future
     if future_bid_price and spot_ask_price:
         investment = spot_ask_price * (1 + transaction_cost)
