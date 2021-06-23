@@ -121,6 +121,7 @@ class RateWatchList:
               f"{best_long_quantity} unidades, ${best_long_investment:.2f}) ")
         print(f"Mejor tasa tomadora a {days_to_maturity} dias: {best_short_rate:.2%} ({best_short_future}, "
               f"{best_short_quantity} unidades, ${best_short_investment:.2f}) ")
+        print()
 
         if nominal_long_rate > best_short_rate or nominal_short_rate < best_long_rate:
             # Hay una oportunidad de arbitraje de tasas
@@ -147,6 +148,13 @@ class RateWatchList:
             long_rate_quantity = max_investment_amount // long_rate_buy_price
             short_rate_quantity = max_investment_amount // short_rate_sell_price
 
+            # Si el monto maximo es muy pequeño, la cantidad puede ser cero.
+            # Probar si la operacion es rentable con una unidad
+            if long_rate_quantity == 0:
+                long_rate_quantity = 1
+            if short_rate_quantity == 0:
+                short_rate_quantity == 1
+
             # Inversion, retorno y ganancia de la operacion
             # Los montos positivos son ingresos de efectivo, los negativos son egresos
             # Las variables _investment son los flujos al día de hoy (T + 0)
@@ -160,13 +168,12 @@ class RateWatchList:
             total_profit = total_investment + total_return
 
             # Mostrar en pantalla datos de la operacion
-            print()
-            print("Colocar tasa")
+            print("Tasa colocadora")
             print(f"Comprar {long_rate_buy_asset}: {long_rate_quantity:.0f} x ${long_rate_buy_price:.2f} "
                   f"= ${long_rate_investment:.2f} (incl. costos)")
             print(f"Vender {long_rate_sell_asset}: {long_rate_quantity:.0f} x ${long_rate_sell_price:.2f} "
                   f"= ${long_rate_return:.2f} (incl. costos)")
-            print("Tomar tasa")
+            print("Tasa tomadora")
             print(f"Vender {short_rate_sell_asset}: {short_rate_quantity:.0f} x ${short_rate_sell_price:.2f} "
                   f"= ${short_rate_investment:.2f} (incl. costos)")
             print(f"Comprar {short_rate_buy_asset}: {short_rate_quantity:.0f} x ${short_rate_buy_price:.2f} "

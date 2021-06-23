@@ -38,3 +38,11 @@
 # interest_rate_test.csv: lote de pruebas para testeo unitario de rate.py
 # interest_rate_text.xlsx: planilla Excel para generar interest_rate_test.csv
 # watch_list.csv: lista de pares (futuro, activo subyacente) con los cuales buscar arbitraje de tasas
+#
+# 05. Mejoras a implementar
+# -------------------------
+# 1- Los metodos buy y sell en rofex.py no rutean ordenes. Solo imprimen la orden. Implementar estas funciones
+# 2- En algunos casos en los que el margen es chico y la diferencia entre los precios de los activos involucrados
+# es grande, la operacion no es rentable y se cancela. La razón por la que ocurre esto es que solo pueden operarse
+# cantidades enteras de contratos. Revisar la lógica que determina la cantidad de contratos a operar
+#
